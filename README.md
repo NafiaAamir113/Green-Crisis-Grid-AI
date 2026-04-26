@@ -106,7 +106,7 @@ Final Crisis Report + Visualization
 
 ## 🔗 Live Demo
 
-https://your-streamlit-app-link.com
+https://green-crisis-grid-ai-22b2yesnplnehcj3exmraa.streamlit.app/
 
 ---
 
