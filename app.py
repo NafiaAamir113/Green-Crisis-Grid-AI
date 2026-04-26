@@ -194,63 +194,35 @@
 #     st.image("https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop", use_container_width=True)
 #     st.warning("⚠️ SYSTEM STANDBY: Awaiting Disaster Specification in Sidebar.")
 
+
+
+
 import streamlit as st
 import pydeck as pdk
 import requests
 import math
-import time
 import random
 from pinecone import Pinecone
 from sentence_transformers import SentenceTransformer
 
 # =====================================================
-# 🎨 UI CONFIGURATION (Clean, Light & Professional)
+# 🔐 CONFIG
 # =====================================================
-st.set_page_config(page_title="Green Crisis Grid AI", layout="wide")
 
-# Professional Light Theme CSS
-st.markdown("""
-<style>
-    .main { background-color: #fcfcfc; }
-    .stMetric { 
-        background-color: #ffffff; 
-        padding: 20px; 
-        border-radius: 10px; 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        border: 1px solid #eee;
-    }
-    div.stButton > button:first-child {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        font-weight: bold;
-    }
-    .status-box {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 5px solid #28a745;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 🔑 Secrets Handling
 PINECONE_API_KEY = st.secrets["PINECONE_API_KEY"]
 TOGETHER_API_KEY = st.secrets["TOGETHER_API_KEY"]
+
 INDEX_NAME = "crisis-command-center-index"
 
-@st.cache_resource
-def load_models():
-    pc = Pinecone(api_key=PINECONE_API_KEY)
-    index = pc.Index(INDEX_NAME)
-    embedding_model = SentenceTransformer("BAAI/bge-large-en-v1.5")
-    return index, embedding_model
+pc = Pinecone(api_key=PINECONE_API_KEY)
+index = pc.Index(INDEX_NAME)
 
-index, embed_model = load_models()
+model = SentenceTransformer("BAAI/bge-large-en-v1.5")
 
 # =====================================================
-# 🌍 DATABASE
+# 🌍 CITY DATABASE
 # =====================================================
+
 CITIES = {
     "Faisalabad": (31.4504, 73.1350),
     "Lahore": (31.5204, 74.3587),
@@ -260,130 +232,235 @@ CITIES = {
 }
 
 # =====================================================
-# ⚙️ CORE LOGIC
+# 🧠 PINECONE RAG
 # =====================================================
 
-def simulate_energy_allocation():
-    """Simulates localized power allocation to critical facilities"""
-    sources = ["Community Solar Array", "Backup Battery Bank", "Local Microgrid"]
-    amount = random.uniform(5.5, 25.0)
+def search_ndma(query):
+    try:
+        vector = model.encode(query, normalize_embeddings=True).tolist()
+
+        results = index.query(
+            vector=vector,
+            top_k=5,
+            include_metadata=True
+        )
+
+        return [
+            m["metadata"]["text"]
+            for m in results.get("matches", [])
+            if m.get("metadata", {}).get("text")
+        ]
+
+    except Exception as e:
+        return [f"Retrieval error: {str(e)}"]
+
+# =====================================================
+# 🌡️ DISASTER MODELS
+# =====================================================
+
+def heatwave(lat, lon):
+    try:
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m"
+        data = requests.get(url).json()
+        t = data["hourly"]["temperature_2m"][0]
+
+        if t > 45:
+            return 9, f"Extreme heatwave ({t}°C)"
+        if t > 40:
+            return 7, f"Severe heat ({t}°C)"
+        if t > 35:
+            return 5, f"Moderate heat ({t}°C)"
+        return 3, f"Normal temperature ({t}°C)"
+    except:
+        return 5, "Weather API error"
+
+def flood(lat, lon):
+    try:
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=precipitation"
+        data = requests.get(url).json()
+        r = data["hourly"]["precipitation"][0]
+
+        if r > 20:
+            return 9, f"Flash flood risk ({r}mm)"
+        if r > 10:
+            return 7, f"Heavy rainfall ({r}mm)"
+        return 3, f"Low rainfall ({r}mm)"
+    except:
+        return 5, "Weather API error"
+
+def fire(lat, lon):
+    try:
+        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=wind_speed_10m"
+        data = requests.get(url).json()
+        w = data["hourly"]["wind_speed_10m"][0]
+
+        if w > 40:
+            return 8, f"High fire risk ({w})"
+        if w > 25:
+            return 6, f"Moderate fire risk ({w})"
+        return 3, f"Low fire risk ({w})"
+    except:
+        return 5, "Weather API error"
+
+def earthquake():
+    try:
+        url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"
+        data = requests.get(url).json()
+
+        if not data["features"]:
+            return 3, "No seismic activity"
+
+        m = data["features"][0]["properties"]["mag"]
+
+        if m > 6:
+            return 9, f"Strong earthquake (M {m})"
+        if m > 4:
+            return 7, f"Moderate earthquake (M {m})"
+        return 4, f"Minor earthquake (M {m})"
+    except:
+        return 5, "Earthquake API error"
+
+def detect(disaster, lat, lon):
+    if disaster == "Heatwave":
+        return heatwave(lat, lon)
+    if disaster == "Flood":
+        return flood(lat, lon)
+    if disaster == "Fire":
+        return fire(lat, lon)
+    return earthquake()
+
+# =====================================================
+# ⚡ ENERGY SIMULATION (from your second system)
+# =====================================================
+
+def energy_allocation():
+    sources = ["Solar Grid", "Battery Backup", "Microgrid"]
     return {
-        "id": f"GRID-TX-{random.randint(1000, 9999)}",
+        "id": f"GRID-{random.randint(1000,9999)}",
         "source": random.choice(sources),
         "target": "District Hospital Backup",
-        "amount": round(amount, 2),
-        "impact": "Stable"
+        "amount": round(random.uniform(5, 25), 2)
     }
 
-def search_emergency_knowledge(query):
-    try:
-        vector = embed_model.encode(query, normalize_embeddings=True).tolist()
-        results = index.query(vector=vector, top_k=2, include_metadata=True)
-        return [match.get("metadata", {}).get("text", "Standard emergency protocol active.") for match in results.get("matches", [])]
-    except:
-        return ["Localized emergency protocols initialized."]
-
-def get_severity_index(disaster, lat, lon):
-    try:
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=precipitation,temperature_2m"
-        res = requests.get(url).json()
-        if disaster == "Flood":
-            val = res["hourly"]["precipitation"][0]
-            return (8, f"High Rainfall Alert: {val}mm") if val > 12 else (3, f"Moderate Rainfall: {val}mm")
-        elif disaster == "Heatwave":
-            temp = res["hourly"]["temperature_2m"][0]
-            return (9, f"Critical Temp: {temp}°C") if temp > 42 else (4, f"Normal: {temp}°C")
-        return 5, "Sensor Check... Done."
-    except:
-        return 6, "Dynamic severity assessment active."
-
 # =====================================================
-# 🖥️ UI LAYOUT
+# 🚀 LLM (TOGETHER AI)
 # =====================================================
 
-st.title("🚀 Green Crisis Grid AI")
-st.markdown("##### Smart Disaster Response & Energy Optimization Dashboard")
+def generate_report(city, disaster, severity, reason, docs, energy):
 
-# Metric Ribbon - UPDATED: Realistic Agent Count & Clearer Labels
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("System Hub", "Active", "Online")
-m2.metric("Local Nodes", "24", "+2 Active") # Changed from 1,250 to a realistic local count
-m3.metric("Emergency Energy", "85.2 kWh", "Allocated")
-m4.metric("Knowledge Base", "Verified", "NDMA Linked")
+    system_prompt = """
+You are NDMA Pakistan Crisis Command AI.
 
-# Sidebar
-with st.sidebar:
-    st.header("Crisis Parameters")
-    city = st.selectbox("Operating Sector (City)", list(CITIES.keys()))
-    hazard = st.selectbox("Hazard Type", ["Flood", "Heatwave", "Fire", "Earthquake"])
-    trigger = st.button("🚨 Run Emergency Protocol", use_container_width=True)
-    st.divider()
-    st.caption("**Green Crisis Grid AI** utilizes RAG-based intelligence to prioritize power and resources for hospitals during peak emergencies.")
+Generate structured emergency report:
 
-if trigger:
-    lat, lon = CITIES[city]
-    
-    with st.status("Initializing Green Crisis Grid Intelligence...", expanded=True) as status:
-        st.write("📖 Fetching factual emergency data via RAG...")
-        intel_docs = search_emergency_knowledge(f"{hazard} emergency response {city}")
-        
-        st.write("⚡ Balancing local energy grid for critical facilities...")
-        power_task = simulate_energy_allocation()
-        
-        st.write("🛰️ Pulling real-time satellite weather data...")
-        score, note = get_severity_index(hazard, lat, lon)
-        
-        status.update(label="System Analysis Finalized", state="complete")
+1. Risk Level
+2. Situation Analysis
+3. Immediate Actions
+4. Evacuation Plan
+5. Hospital Response
+6. Government Advisory
+7. Executive Summary (3 lines max)
 
-    # Main Data Display
-    c1, c2 = st.columns([2, 1])
-    
-    with c1:
-        st.subheader("📍 Deployment Map")
-        v_state = pdk.ViewState(latitude=lat, longitude=lon, zoom=12, pitch=45)
-        point_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=[{"lat": lat, "lon": lon}],
-            get_position="[lon, lat]",
-            get_color="[255, 75, 75, 180]" if score > 7 else "[40, 167, 69, 180]",
-            get_radius=1000
+Be precise, operational, and government-grade.
+"""
+
+    user_prompt = f"""
+CITY: {city}
+DISASTER: {disaster}
+SEVERITY: {severity}/10
+
+WEATHER:
+{reason}
+
+NDMA INTELLIGENCE:
+{chr(10).join(docs)}
+
+ENERGY ACTION:
+{energy}
+"""
+
+    try:
+        res = requests.post(
+            "https://api.together.xyz/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {TOGETHER_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                "temperature": 0.2,
+                "max_tokens": 1200
+            }
         )
-        st.pydeck_chart(pdk.Deck(layers=[point_layer], initial_view_state=v_state, map_style="light"))
-        
-        st.subheader("💡 Grid Energy Action")
-        st.success(f"**Task ID:** {power_task['id']} | **Source:** {power_task['source']} → **Target:** {power_task['target']} | **Volume:** {power_task['amount']} kWh")
 
-    with c2:
-        st.subheader("📊 Severity Metrics")
-        sev_label = "CRITICAL" if score > 7 else "MODERATE"
-        st.metric("Risk Score", f"{score}/10", sev_label, delta_color="inverse" if score > 7 else "normal")
-        st.write(f"**Live Report:** {note}")
-        
-        st.divider()
-        st.subheader("🏥 Logistics Status")
-        st.info("Hospital backup power initialized. Priority routing for ICU and ER departments active.")
-        
-        with st.expander("Verified Protocol Data"):
-            for d in intel_docs:
-                st.write(f"• {d}")
+        return res.json()["choices"][0]["message"]["content"]
 
-    # Output Log
-    st.divider()
-    st.subheader("📜 Executive Summary")
-    final_log = f"""
-    SECTOR: {city} | HAZARD: {hazard} | SEVERITY: {score}/10
-    
-    ENERGY COORDINATION:
-    The Green Crisis Grid AI identified excess capacity in '{power_task['source']}'. 
-    Successfully rerouted {power_task['amount']} kWh to help the District Hospital.
-    
-    CRITICAL ACTIONS:
-    - Deploy emergency teams to {city} coordinates.
-    - Reference NDMA Protocol: {intel_docs[0] if intel_docs else "Default SOP applied."}
-    - Monitoring weather: {note}.
-    """
-    st.text_area("System Log Output", final_log, height=200)
-    st.download_button("📩 Download Command Report", final_log, file_name=f"GCGrid_{city}_Report.txt")
+    except Exception as e:
+        return f"AI Error: {str(e)}"
 
-else:
-    st.info("System Standby. Use the sidebar to initiate a crisis response protocol.")
+# =====================================================
+# 🗺️ UI SETUP
+# =====================================================
+
+st.set_page_config(page_title="Green Crisis Grid AI", layout="wide")
+
+st.title("🚀 Green Crisis Grid AI — FINAL SYSTEM")
+
+tab1, tab2 = st.tabs(["🧠 Crisis Intelligence", "🗺️ Live Operations Map"])
+
+# =====================================================
+# 🧠 TAB 1 - INTELLIGENCE
+# =====================================================
+
+with tab1:
+
+    city = st.selectbox("City", list(CITIES.keys()))
+    disaster = st.selectbox("Disaster", ["Heatwave", "Flood", "Fire", "Earthquake"])
+
+    if st.button("Run Crisis System"):
+
+        lat, lon = CITIES[city]
+
+        severity, reason = detect(disaster, lat, lon)
+
+        docs = search_ndma(f"{disaster} emergency {city}")
+
+        energy = energy_allocation()
+
+        report = generate_report(city, disaster, severity, reason, docs, energy)
+
+        st.success("System Active")
+
+        st.text_area("🧠 NDMA AI REPORT", report, height=600)
+
+# =====================================================
+# 🗺️ TAB 2 - MAP
+# =====================================================
+
+with tab2:
+
+    city2 = st.selectbox("Map City", list(CITIES.keys()), key="map")
+
+    lat, lon = CITIES[city2]
+
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=[{"lat": lat, "lon": lon}],
+        get_position='[lon, lat]',
+        get_radius=10000,
+        get_color='[255, 0, 0, 160]'
+    )
+
+    st.pydeck_chart(pdk.Deck(
+        layers=[layer],
+        initial_view_state=pdk.ViewState(
+            latitude=lat,
+            longitude=lon,
+            zoom=10,
+            pitch=40
+        )
+    ))
