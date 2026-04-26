@@ -5,9 +5,9 @@
 
 ## 🧠 Overview
 
-Green Crisis Grid AI is an AI-powered emergency command system that simulates a national-level disaster response center. It combines real-time weather data, Retrieval-Augmented Generation (RAG), hospital prioritization, and intelligent energy allocation to generate structured crisis response plans.
+**Green Crisis Grid AI** is an AI-powered emergency command system that simulates a national-level disaster response center. It combines real-time weather data, **Retrieval-Augmented Generation (RAG)**, hospital prioritization, and intelligent energy allocation to generate structured crisis response plans.
 
-It functions as a digital Emergency Operations Center (EOC) that supports fast, data-driven disaster decision-making.
+It functions as a digital **Emergency Operations Center (EOC)** that supports fast, data-driven disaster decision-making.
 
 ---
 
@@ -15,11 +15,11 @@ It functions as a digital Emergency Operations Center (EOC) that supports fast, 
 
 During disasters such as floods, heatwaves, and earthquakes, response systems face:
 
-- Delayed decision-making  
-- Fragmented data sources  
-- Lack of real-time intelligence  
-- Inefficient resource allocation  
-- No centralized AI command system  
+- **Delayed decision-making** due to information overload.
+- **Fragmented data sources** across different agencies.
+- **Lack of real-time intelligence** for immediate field action.
+- **Inefficient resource allocation** (specifically energy grids).
+- **No centralized AI command system** to bridge the gap.
 
 This leads to slower emergency response and increased risk to human lives.
 
@@ -29,24 +29,23 @@ This leads to slower emergency response and increased risk to human lives.
 
 Green Crisis Grid AI solves this by building an autonomous crisis intelligence system that:
 
-- Detects disaster severity using real-time weather APIs  
-- Retrieves NDMA emergency intelligence using RAG (Pinecone vector database)  
-- Prioritizes hospitals based on location  
-- Simulates emergency energy redistribution  
-- Generates structured government-level reports using LLMs  
-- Visualizes crisis zones on an interactive map  
+- **Detects disaster severity** using real-time weather APIs.
+- **Retrieves NDMA emergency intelligence** using RAG (Pinecone vector database).
+- **Prioritizes hospitals** based on location and real-time energy needs.
+- **Simulates emergency energy redistribution** from green sources.
+- **Generates structured government-level reports** using Meta-Llama 3.3.
+- **Visualizes crisis zones** on an interactive PyDeck map.
 
 ---
 
 ## ⚙️ Key Features
 
-- 🌍 Real-time disaster detection (Heatwave, Flood, Fire, Earthquake)  
-- 🧠 RAG-based NDMA intelligence retrieval (Pinecone + embeddings)  
-- 🏥 Hospital prioritization using distance calculation  
-- ⚡ Emergency energy allocation simulation  
-- 🤖 AI-generated crisis reports (Together AI - LLaMA 3)  
-- 🗺️ Interactive crisis zone mapping (PyDeck)  
-- 📊 Automated severity scoring engine  
+- 🌍 **Real-time Detection:** Automated monitoring for Heatwaves, Floods, Fire, and Earthquakes.
+- 🧠 **RAG Intelligence:** Context-aware retrieval using Pinecone + `bge-large` embeddings.
+- 🏥 **Medical Prioritization:** Logic-based hospital routing and status monitoring.
+- ⚡ **Energy Mesh:** Autonomous solar/battery energy redistribution simulation.
+- 🤖 **AI-Generated Directives:** Professional briefings powered by Llama 3.3.
+- 🗺️ **Interactive GIS:** Real-time crisis zone mapping and spatial visualization.
 
 ---
 
@@ -61,71 +60,8 @@ graph TD
     E --> F[Energy & Hospital Optimization]
     F --> G[Interactive Dashboard & Report]
 
+
+
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style G fill:#00ff9d,stroke:#333,stroke-width:2px
     style D fill:#D6EAF8,stroke:#333,stroke-width:1px
-
----
-
-## 🧰 Tech Stack
-
-- Streamlit (Frontend UI)
-- Python (Core Backend Logic)
-- Together AI (LLaMA 3 Model)
-- Pinecone (Vector Database for RAG)
-- SentenceTransformers (Embeddings)
-- Open-Meteo API (Weather Data)
-- USGS Earthquake API
-- PyDeck (Geospatial Visualization)
-- BeautifulSoup (NDMA Data Scraping)
-
----
-
-## 📊 Output Report Includes
-
-- Risk Level  
-- Situation Analysis  
-- Immediate Actions  
-- Evacuation Plan  
-- Hospital Response  
-- Government Advisory  
-- Executive Summary  
-
----
-
-## 🚀 Impact
-
-- Faster disaster response decisions  
-- AI-powered national emergency simulation  
-- Improved resource allocation  
-- Real-time crisis visualization  
-- Demonstrates future AI governance systems  
-
----
-
-## 🔗 Live Demo
-
-https://green-crisis-grid-ai-22b2yesnplnehcj3exmraa.streamlit.app/
-
----
-
-## 📂 Project Structure
-
-- app.py  
-- requirements.txt  
-- data (NDMA scraped knowledge base)  
-- utils  
-- README.md  
-
----
-
-## 👨‍💻 Author
-
-Nafia Aamir  
-AI | RAG Systems | Full Stack AI Applications  
-
----
-
-## 🏁 Conclusion
-
-Green Crisis Grid AI demonstrates how AI can transform disaster management into an autonomous, real-time decision-making system for national-scale emergency response.
