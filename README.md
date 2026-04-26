@@ -65,7 +65,8 @@ graph TD
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style G fill:#00ff9d,stroke:#333,stroke-width:2px
     style D fill:#D6EAF8,stroke:#333,stroke-width:1px
-
+'''
+---
 🧰 Tech Stack
 Frontend: Streamlit
 
