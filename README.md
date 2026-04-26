@@ -104,4 +104,4 @@ Green Crisis Grid AI demonstrates how autonomous systems can bridge the gap betw
 
 ### 👨‍💻 Author
 **Nafia Aamir**
-*AI Researcher | RAG Systems Specialist 
+*AI Researcher | RAG Systems Specialist*
