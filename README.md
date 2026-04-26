@@ -52,14 +52,17 @@ Green Crisis Grid AI solves this by building an autonomous crisis intelligence s
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph LR
-  A[User Input] --> B[Weather/USGS APIs]
-  B --> C[Severity Engine]
-  C --> D[RAG: Pinecone + NDMA Data]
-  D --> E[LLM: Llama 3.3 Reasoning]
-  E --> F[Energy/Hospital Optimization]
-  F --> G[Interactive Dashboard & Report]
+graph TD
+    A[User Input] --> B{External APIs}
+    B -->|Weather/Seismic| C[Severity Engine]
+    C --> D[RAG: Pinecone + NDMA Data]
+    D --> E[LLM: Llama 3.3 Reasoning]
+    E --> F[Energy & Hospital Optimization]
+    F --> G[Interactive Dashboard & Report]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style G fill:#00ff9d,stroke:#333,stroke-width:2px
+    style D fill:#D6EAF8,stroke:#333,stroke-width:1px
 
 ---
 
