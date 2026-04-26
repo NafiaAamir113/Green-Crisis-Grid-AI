@@ -65,3 +65,66 @@ graph TD
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style G fill:#00ff9d,stroke:#333,stroke-width:2px
     style D fill:#D6EAF8,stroke:#333,stroke-width:1px
+
+🧰 Tech Stack
+Frontend: Streamlit
+
+Logic: Python
+
+Reasoning Engine: Meta-Llama 3.3 (via Together AI)
+
+Vector DB: Pinecone (Serverless)
+
+Embeddings: BAAI/bge-large-en-v1.5
+
+APIs: Open-Meteo (Weather), USGS (Earthquake)
+
+Visuals: PyDeck (Geospatial)
+
+Data: BeautifulSoup (NDMA Scraping)
+
+📊 Output Report Includes
+When the system triggers a crisis protocol, it generates a comprehensive intelligence brief covering:
+
+Risk Level (1-10): Instant severity assessment.
+
+Situation Analysis: Real-time data synthesis.
+
+Immediate Actions: Critical first-step maneuvers.
+
+Evacuation Plan: Logic-based routing for civilians.
+
+Hospital Response: Prioritizing medical facilities for power and resources.
+
+Government Advisory: Drafted official communications.
+
+Executive Summary: High-level overview for fast decision-making.
+
+🚀 Impact
+Seconds, not hours: Dramatically faster disaster response decisions.
+
+Grounding: AI-powered simulation that stays within official NDMA protocols using RAG.
+
+Efficiency: Improved resource allocation for critical healthcare infrastructure.
+
+Visibility: Real-time crisis visualization for higher-level command centers.
+
+🔗 Live Demo
+View Live App
+
+📂 Project Structure
+app.py: Main Streamlit application and UI logic.
+
+requirements.txt: Project dependencies and environment setup.
+
+data/: NDMA scraped knowledge base (Primary vector source).
+
+utils/: Helper functions for API calls, RAG logic, and data processing.
+
+README.md: System documentation and architecture overview.
+
+👨‍💻 Author
+Nafia Aamir AI Researcher | RAG Systems Specialist | Full Stack AI Applications
+
+🏁 Conclusion
+Green Crisis Grid AI demonstrates how AI can transform disaster management into an autonomous, real-time decision-making system. By bridging the gap between raw environmental data and actionable policy, it paves the way for the next generation of national-scale emergency response systems.
