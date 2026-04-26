@@ -97,11 +97,11 @@ The AI generates a structured "Executive Directive" including:
 
 ---
 
-### 👨‍💻 Author
-**Nafia Aamir**
-*AI Researcher | RAG Systems Specialist | BS Information Technology*
+### 🏁 Conclusion
+Green Crisis Grid AI demonstrates how autonomous systems can bridge the gap between "Big Data" and "Rapid Action," ensuring that during a national crisis, the grid stays stable and lives are saved through AI-driven precision.
 
 ---
 
-### 🏁 Conclusion
-Green Crisis Grid AI demonstrates how autonomous systems can bridge the gap between "Big Data" and "Rapid Action," ensuring that during a national crisis, the grid stays stable and lives are saved through AI-driven precision.
+### 👨‍💻 Author
+**Nafia Aamir**
+*AI Researcher | RAG Systems Specialist 
