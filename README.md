@@ -67,65 +67,41 @@ graph TD
     style D fill:#D6EAF8,stroke:#333,stroke-width:1px
 ```
 ---
-🧰 Tech Stack
-Frontend: Streamlit
 
-Logic: Python
+### 🧰 Tech Stack
+* **Frontend:** Streamlit (Clean, professional UI)
+* **Reasoning Engine:** Meta-Llama 3.3-70B via Together AI (Chosen for superior instruction-following in high-stakes reporting)
+* **Vector Database:** Pinecone Serverless (RAG implementation)
+* **Embeddings:** `BAAI/bge-large-en-v1.5` (State-of-the-art retrieval accuracy)
+* **Geospatial:** PyDeck (Interactive GIS) & Open-Meteo API
+* **Data Ingestion:** BeautifulSoup (Used for scraping and structuring NDMA knowledge bases)
 
-Reasoning Engine: Meta-Llama 3.3 (via Together AI)
+---
 
-Vector DB: Pinecone (Serverless)
+### 📊 Tactical Report Output
+The AI generates a structured "Executive Directive" including:
+1. **Risk Level:** A normalized severity index.
+2. **Situation Analysis:** Real-time environmental breakdown.
+3. **Immediate Actions:** Priority-1 tactical maneuvers for first responders.
+4. **Evacuation Plan:** Geographic-specific routing advice.
+5. **Hospital Response:** Power status and distance-based triage logistics.
+6. **Government Advisory:** Prepared official public-facing communication.
+7. **Executive Summary:** A concise 3-line briefing for rapid decision-making.
 
-Embeddings: BAAI/bge-large-en-v1.5
+---
 
-APIs: Open-Meteo (Weather), USGS (Earthquake)
+### 🚀 Impact & Future Scope
+* **Reduced Response Time:** Moves from manual data gathering to AI-generated briefs in seconds.
+* **AI Governance:** Demonstrates how RAG can be used to keep AI systems legally and operationally grounded.
+* **Future Work:** Integration of LangGraph for multi-agent negotiation and live IoT sensors for microgrid management.
 
-Visuals: PyDeck (Geospatial)
+---
 
-Data: BeautifulSoup (NDMA Scraping)
+### 👨‍💻 Author
+**Nafia Aamir**
+*AI Researcher | RAG Systems Specialist | BS Information Technology*
 
-📊 Output Report Includes
-When the system triggers a crisis protocol, it generates a comprehensive intelligence brief covering:
+---
 
-Risk Level (1-10): Instant severity assessment.
-
-Situation Analysis: Real-time data synthesis.
-
-Immediate Actions: Critical first-step maneuvers.
-
-Evacuation Plan: Logic-based routing for civilians.
-
-Hospital Response: Prioritizing medical facilities for power and resources.
-
-Government Advisory: Drafted official communications.
-
-Executive Summary: High-level overview for fast decision-making.
-
-🚀 Impact
-Seconds, not hours: Dramatically faster disaster response decisions.
-
-Grounding: AI-powered simulation that stays within official NDMA protocols using RAG.
-
-Efficiency: Improved resource allocation for critical healthcare infrastructure.
-
-Visibility: Real-time crisis visualization for higher-level command centers.
-
-🔗 Live Demo
-View Live App
-
-📂 Project Structure
-app.py: Main Streamlit application and UI logic.
-
-requirements.txt: Project dependencies and environment setup.
-
-data/: NDMA scraped knowledge base (Primary vector source).
-
-utils/: Helper functions for API calls, RAG logic, and data processing.
-
-README.md: System documentation and architecture overview.
-
-👨‍💻 Author
-Nafia Aamir AI Researcher | RAG Systems Specialist | Full Stack AI Applications
-
-🏁 Conclusion
-Green Crisis Grid AI demonstrates how AI can transform disaster management into an autonomous, real-time decision-making system. By bridging the gap between raw environmental data and actionable policy, it paves the way for the next generation of national-scale emergency response systems.
+### 🏁 Conclusion
+Green Crisis Grid AI demonstrates how autonomous systems can bridge the gap between "Big Data" and "Rapid Action," ensuring that during a national crisis, the grid stays stable and lives are saved through AI-driven precision.
