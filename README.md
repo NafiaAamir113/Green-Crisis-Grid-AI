@@ -52,7 +52,6 @@ Green Crisis Grid AI solves this by building an autonomous crisis intelligence s
 
 ## 🏗️ System Architecture
 
-```mermaid
 graph TD
     A[User Input] --> B{External APIs}
     B -->|Weather/Seismic| C[Severity Engine]
